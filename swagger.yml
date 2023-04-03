@@ -1,0 +1,68 @@
+# swagger.yml
+
+openapi: 3.0.0
+info:
+  title: "Elevator Flask REST API"
+  description: "An API about elevators"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+components:
+  schemas:
+    Elevator:
+      type: "object"
+      required:
+        - id
+      properties:
+        id:
+          type: "integer"
+        floor:
+          type: "integer"
+  parameters:
+    id:
+      name: "id"
+      description: "ID of the elevator to get"
+      in: path
+      required: True
+      schema:
+        type: "integer"
+
+paths:
+  /elevators:
+    get:
+      operationId: "elevators.read_all"
+      tags:
+        - Elevator
+      summary: "Read the list of elevators"
+      responses:
+        "200":
+          description: "Successfully read elevators list"
+  /elevators/{id}:
+    get:
+      operationId: "elevators.read_one"
+      tags:
+        - Elevator
+      summary: "Read one elevator"
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: "Successfully read elevator"
+    put:
+      tags:
+        - Elevator
+      operationId: "elevators.update"
+      summary: "Update an elevator"
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: "Successfully updated elevator"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "elevator"
+              $ref: "#/components/schemas/Elevator"
