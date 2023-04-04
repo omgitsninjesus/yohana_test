@@ -25,7 +25,7 @@ async def push_button(id: int):
                 status_code=400, detail=f"Button on floor {id} is already pushed"
             )
         button.push()
-        elevator_id = await controller.send_to_closest_elevator(id)
+        elevator_id = await controller.user_requested(id)
         return {"status": f"wait for elevator {elevator_id}"}
     else:
         raise HTTPException(

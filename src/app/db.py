@@ -18,7 +18,7 @@ from datetime import datetime
 DATABASE_URL = os.getenv("DATABASE_URL", db_url)
 
 # SQLAlchemy
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 metadata = MetaData()
 
 elevators = Table(

@@ -64,3 +64,21 @@ def test_elevator_incorrect_id(test_app, monkeypatch):
 
     response = test_app.get("/elevators/0")
     assert response.status_code == 422
+
+
+def test_update_note(test_app, monkeypatch):
+    test_update_data = {"moving": True, "floor": 0, "id": 1}
+
+    async def mock_get(id):
+        return True
+
+    monkeypatch.setattr(crud, "get_elevator", mock_get)
+
+    async def mock_put(id, payload):
+        return 1
+
+    monkeypatch.setattr(crud, "elevator_update", mock_put)
+
+    response = test_app.put("/elevators/1/", content=json.dumps(test_update_data))
+    assert response.status_code == 201
+    assert response.json() == json.loads('{"status": "ok lets go"}')
