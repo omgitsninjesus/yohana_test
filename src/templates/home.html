@@ -1,0 +1,23 @@
+<!-- templates/home.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Elevators Flask REST API</title>
+</head>
+
+<body>
+    <h1>
+        Hello!
+    </h1>
+    <ul>
+        {% for elevator in building %}
+        <li>Elevator:{{ elevator.id }} Floor:{{ elevator.floor }}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>
