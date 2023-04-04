@@ -4,9 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
 connexion = {extras = ["swagger-ui"], version = "*"}
 flask-marshmallow = {extras = ["sqlalchemy"], version = "*"}
+flask = {extras = ["async"], version = "*"}
+fastapi = "*"
+pytest = "*"
+databases = {extras = ["aiosqlite"], version = "*"}
+sqlalchemy = "*"
 
 [dev-packages]
 
