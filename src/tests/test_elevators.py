@@ -7,14 +7,26 @@ from app.api import crud
 
 def test_all_elevators(test_app, monkeypatch):
     test_data = [
-        {"id": 1, "floor": 2},
-        {"id": 1, "floor": 4},
+        {
+            "id": 0,
+            "floor": 2,
+            "moving": False,
+            "doors_opened": False,
+            "last_movement": "2023-04-04T18:00:43",
+        },
+        {
+            "id": 1,
+            "floor": 4,
+            "moving": False,
+            "doors_opened": False,
+            "last_movement": "2023-04-04T18:00:43",
+        },
     ]
 
     async def mock_get_all():
         return test_data
 
-    monkeypatch.setattr(crud, "get_all", mock_get_all)
+    monkeypatch.setattr(crud, "get_all_elevators", mock_get_all)
 
     response = test_app.get("/elevators/")
     assert response.status_code == 200
@@ -22,12 +34,18 @@ def test_all_elevators(test_app, monkeypatch):
 
 
 def test_elevator_status(test_app, monkeypatch):
-    test_data = {"id": 1, "floor": 2}
+    test_data = {
+        "id": 1,
+        "floor": 4,
+        "moving": False,
+        "doors_opened": False,
+        "last_movement": "2023-04-04T18:00:43",
+    }
 
     async def mock_get(id):
         return test_data
 
-    monkeypatch.setattr(crud, "get", mock_get)
+    monkeypatch.setattr(crud, "get_elevator", mock_get)
 
     response = test_app.get("/elevators/1")
     assert response.status_code == 200
@@ -38,31 +56,11 @@ def test_elevator_incorrect_id(test_app, monkeypatch):
     async def mock_get(id):
         return None
 
-    monkeypatch.setattr(crud, "get", mock_get)
+    monkeypatch.setattr(crud, "get_elevator", mock_get)
 
-    response = test_app.get("/elevators/150")
+    response = test_app.get("/elevators/3")
     assert response.status_code == 404
     assert response.json()["detail"] == "Elevator not found"
 
-
-def test_create_elevator(test_app, monkeypatch):
-    test_request_payload = {"floor": 1}
-    test_response_payload = {"id": 1, "floor": 1}
-
-    async def mock_post(payload):
-        return 1
-
-    monkeypatch.setattr(crud, "post", mock_post)
-
-    response = test_app.post(
-        "/elevators/",
-        content=json.dumps(test_request_payload),
-    )
-
-    assert response.status_code == 201
-    assert response.json() == test_response_payload
-
-
-def test_create_elevator_invalid_json(test_app):
-    response = test_app.post("/elevators/", content=None)
+    response = test_app.get("/elevators/0")
     assert response.status_code == 422

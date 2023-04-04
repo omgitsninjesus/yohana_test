@@ -6,7 +6,7 @@ import json
 from app.api.models import BUTTONS
 from app.api import crud
 from app.config import FLOOR_COUNT
-from app.controller import send_to_closest_elevator
+from app.controller import controller
 
 router = APIRouter()
 
@@ -25,7 +25,7 @@ async def push_button(id: int):
                 status_code=400, detail=f"Button on floor {id} is already pushed"
             )
         button.push()
-        elevator_id = await send_to_closest_elevator(id)
+        elevator_id = await controller.send_to_closest_elevator(id)
         return {"status": f"wait for elevator {elevator_id}"}
     else:
         raise HTTPException(

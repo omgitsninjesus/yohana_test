@@ -12,6 +12,7 @@ from sqlalchemy import (
     create_engine,
     Boolean,
 )
+from sqlalchemy.sql import func
 from datetime import datetime
 
 DATABASE_URL = os.getenv("DATABASE_URL", db_url)
@@ -26,11 +27,15 @@ elevators = Table(
     Column("id", Integer, primary_key=True),
     Column("floor", Integer),
     Column(
-        "timestamp",
+        "last_movement",
         DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
+        default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     ),
+    Column("moving", Boolean, default=False),
+    # TODO: better not move with doors opened. Not used.
+    Column("doors_opened", Boolean, default=False),
 )
 
 buttons = Table(
