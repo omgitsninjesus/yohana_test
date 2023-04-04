@@ -2,7 +2,7 @@ import asyncio
 from fastapi import FastAPI
 from app.api import ping, elevators, buttons
 from app.db import engine, database, metadata
-from app.api.models import CONTROLLERS
+from app.controller import CONTROLLERS
 
 metadata.create_all(engine)
 
@@ -15,7 +15,7 @@ tasks = []
 async def startup():
     await database.connect()
     for controller in CONTROLLERS:
-        task = asyncio.create_task(controller.process_input())
+        task = asyncio.create_task(controller.run())
         tasks.append(task)
 
 

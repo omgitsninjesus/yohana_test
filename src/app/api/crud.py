@@ -1,7 +1,7 @@
 from app.api.models import ElevatorSchema
 from app.db import elevators, database, buttons
 
-
+# FIXME: currently not used
 async def get_all():
     query = elevators.select()
     return await database.fetch_all(query=query)

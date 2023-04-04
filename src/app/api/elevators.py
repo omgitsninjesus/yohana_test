@@ -3,13 +3,12 @@ import asyncio
 from typing import List
 from fastapi import APIRouter, HTTPException, Path
 
-from app.api.models import ElevatorSchema, ELEVATORS, CONTROLLERS
+from app.api.models import ElevatorSchema, ELEVATORS
+from app.controller import CONTROLLERS
 from app.api import crud
 from app.config import ELEVATOR_COUNT, FLOOR_COUNT
 
 router = APIRouter()
-
-TURNED_ON = False
 
 
 @router.get("/", status_code=200)

@@ -1,12 +1,12 @@
 # elevators.py
 from typing import List
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 import json
 
-from app.api.models import BUTTONS, send_to_closest_elevator
+from app.api.models import BUTTONS
 from app.api import crud
 from app.config import FLOOR_COUNT
-from app.processor import floor_button_processor
+from app.controller import send_to_closest_elevator
 
 router = APIRouter()
 
@@ -24,9 +24,9 @@ async def push_button(id: int):
             raise HTTPException(
                 status_code=400, detail=f"Button on floor {id} is already pushed"
             )
-        button.pushed = True
-        await send_to_closest_elevator(id)
-        return {"status": "wait"}
+        button.push()
+        elevator_id = await send_to_closest_elevator(id)
+        return {"status": f"wait for elevator {elevator_id}"}
     else:
         raise HTTPException(
             status_code=404, detail=f"Button is not found on floor {id}"
